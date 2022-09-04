@@ -1,0 +1,218 @@
+// sass-lint:disable border-zero
+
+:root {
+  --color-blue: rgb(78, 101, 203);
+  --color-purple: rgb(113, 75, 128);
+  --color-pink: rgb(203, 66, 116);
+  --color-like: #e1ffee;
+  --transition-time: 500ms;
+  --transition-ease: cubic-bezier(0.1, 0.7, 0.8, 0.3);
+}
+
+.toggle {
+  display: flex;
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  place-items: center;
+  place-content: center;
+
+  &:hover {
+    background-color: rgba(203, 66, 116, 0.1);
+  }
+}
+
+.like-text {
+  margin-left: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-like);
+}
+
+.heart-check {
+  position: absolute;
+  visibility: hidden;
+}
+
+.heart {
+  cursor: pointer;
+
+  svg {
+    width: 48px;
+  }
+
+  .stroke {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    stroke-linecap: round;
+    stroke-width: 2.5;
+  }
+
+  .initial {
+    stroke-width: 1.5;
+    stroke: var(--color-pink);
+    fill: transparent;
+  }
+}
+
+.heart-check:checked + .heart {
+  svg {
+    transform-origin: 50% 50%;
+    animation: heart var(--transition-time) cubic-bezier(0.64, -1.5, 0.64, 1.5);
+    animation-fill-mode: forwards;
+  }
+
+  .initial {
+    display: none;
+  }
+
+  .stroke {
+    animation: stroke var(--transition-time) var(--transition-ease);
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes heart {
+  from {
+    transform: scale(1);
+  }
+
+  78% {
+    transform: scale(1.25);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes stroke {
+  from {
+    stroke: var(--color-blue);
+    fill: transparent;
+  }
+
+  50% {
+    stroke: var(--color-purple);
+  }
+
+  85% {
+    fill: transparent;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+    stroke: var(--color-pink);
+    fill: var(--color-pink);
+  }
+}
+
+@import url("https://fonts.googleapis.com/css?family=Mukta:700");
+
+$bg: #f3f8fa;
+$white: #fff;
+$pink: #ffc4c4;
+
+@mixin transition(
+  $property: all,
+  $duration: 0.45s,
+  $ease: cubic-bezier(0.65, 0, 0.076, 1)
+) {
+  transition: $property $duration $ease;
+}
+
+button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+
+  &.learn-more {
+    width: 12rem;
+    height: auto;
+
+    .circle {
+      @include transition(all, 0.45s, cubic-bezier(0.65, 0, 0.076, 1));
+
+      position: relative;
+      display: block;
+      margin: 0;
+      width: 3rem;
+      height: 3rem;
+      background: $pink;
+      border-radius: 1.625rem;
+
+      .icon {
+        @include transition(all, 0.45s, cubic-bezier(0.65, 0, 0.076, 1));
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background: $white;
+
+        &.arrow {
+          @include transition(all, 0.45s, cubic-bezier(0.65, 0, 0.076, 1));
+
+          left: 0.625rem;
+          width: 1.125rem;
+          height: 0.125rem;
+          background: none;
+
+          &::before {
+            position: absolute;
+            content: "";
+            top: -0.25rem;
+            right: 0.0625rem;
+            width: 0.625rem;
+            height: 0.625rem;
+            border-top: 0.125rem solid #fff;
+            border-right: 0.125rem solid #fff;
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+
+    .button-text {
+      @include transition(all, 0.45s, cubic-bezier(0.65, 0, 0.076, 1));
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.75rem 0;
+      margin: 0 0 0 1.85rem;
+      color: $pink;
+      font-weight: 700;
+      line-height: 1.6;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+
+  &:hover {
+    .circle {
+      width: 100%;
+
+      .icon {
+        &.arrow {
+          background: $white;
+          transform: translate(1rem, 0);
+        }
+      }
+    }
+
+    .button-text {
+      color: $white;
+    }
+  }
+}

@@ -1,0 +1,322 @@
+@font-face {
+  font-family: cocogoose;
+  src:
+    url(fonts/cocogoose.ttf),
+    url(fonts/cocogoose-bold.ttf);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  background: #000;
+}
+
+.logo {
+  content: url('./icons&imgs/dynasty-logo-plain.png');
+  width: 50px;
+  height: 50px;
+  font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+  background-color: #2e0249;
+}
+
+.movie-list {
+  margin-top: 10%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movie-list li {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  background: #272727;
+}
+
+.movie-list li img {
+  width: 300px;
+  height: auto;
+  border-radius: 12px;
+}
+
+.movie-list li h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  margin-top: auto;
+  padding: 15px 10px 0;
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comments {
+  width: 95%;
+  margin: 16px;
+}
+
+.card {
+  width: 98%;
+  border-radius: 8px;
+  background: #e1e0e0;
+  color: #27003f;
+  margin: 4px;
+}
+
+.comment-head {
+  padding: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: 'cocogoose', sans-serif;
+}
+
+.date {
+  font-family: 'Roboto', sans-serif;
+}
+
+.comment-block {
+  padding: 9px;
+  font-family: 'Roboto', sans-serif;
+}
+
+small {
+  display: none;
+}
+
+small.show {
+  display: block;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap');
+
+footer {
+  box-sizing: border-box;
+  position: relative;
+  margin: 5px 0 0 0;
+  background-color: #080a1a;
+  color: #fff;
+  font-style: normal;
+  padding: 4px 0 10px;
+  line-height: 24px;
+  font-family: 'Tajawal', sans-serif;
+  word-break: normal;
+  border-radius: 10px;
+  box-shadow: 2px 6px 60px 20px rgba(0, 0, 0, 0.1);
+}
+
+.row-footer {
+  padding: 3px 20px 3px 20px;
+  margin-top: 26px;
+}
+
+.row-footer::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oregano&display=swap');
+
+.site-logo {
+  float: left;
+  width: 15%;
+  padding: 10px;
+}
+
+.site-logo span {
+  font-family: 'Oregano', cursive;
+  font-size: 20px;
+}
+
+.main-nav {
+  position: absolute;
+  top: 40%;
+  left: 6%;
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  height: -1px;
+  box-shadow: 2px 2px 60px 8px rgba(102, 98, 98, 0.5);
+}
+
+.follow-icons .social {
+  margin: 0 5px;
+  list-style: none;
+}
+
+.main-nav li {
+  list-style: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #000;
+  transform: rotate(45deg);
+  transition: 0.5s;
+  margin: -30px;
+  opacity: 0.5;
+}
+
+.main-nav li:hover {
+  opacity: 1;
+}
+
+.main-nav li span {
+  margin-left: 6.5px;
+}
+
+.main-nav li.item1 {
+  top: 0;
+  left: 0;
+  color: #00a9c7;
+}
+
+.main-nav li.item2 {
+  bottom: 0;
+  left: 25%;
+  color: red;
+}
+
+.main-nav li.item3 {
+  top: 0;
+  left: 50%;
+  color: yellowgreen;
+}
+
+.main-nav li.item4 {
+  bottom: 0;
+  left: 75%;
+  color: darkmagenta;
+}
+
+.site-links {
+  float: left;
+  width: 20%;
+  padding: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+
+ul.list-links {
+  list-style-type: none;
+}
+
+.follow-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.follow-icons .social i {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.follow-icons .social span {
+  padding-right: 6px;
+}
+
+.arrow {
+  visibility: visible;
+  padding-right: 15px;
+  position: relative;
+  animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+  0% {
+    left: 0;
+  }
+
+  25% {
+    left: 15px;
+  }
+
+  50% {
+    left: 0;
+  }
+
+  75% {
+    left: 15px;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+.right-dis {
+  float: right;
+}
+
+.left-dis {
+  float: left;
+}
+
+@media (max-width: 900px) {
+  .site-logo {
+    float: left;
+    width: 28%;
+    padding: 10px;
+  }
+
+  .site-links span {
+    font-family: 'Gruppo', cursive;
+  }
+
+  ul.list-links li {
+    font-size: 20px;
+    margin-left: -38px;
+  }
+
+  .main-nav {
+    top: 30%;
+    left: 12%;
+  }
+
+  .site-links {
+    float: left;
+    width: 20%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .right-dis {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .dist {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+ul {
+  display: flex;
+}
