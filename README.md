@@ -12,7 +12,7 @@
 
 ## live preview
 
-[anime website demo](https://fullstop125.github.io/capstone-project-anime-db/dist/)
+[anime website demo](https://fullstop125.github.io/capstone-project-anime-db/)
 
 ## Getting Started
 
@@ -40,7 +40,7 @@
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](../../issues/).
+Feel free to check the [issues page](https://github.com/fullstop125/issues/).
 
 
 ## Show your support
