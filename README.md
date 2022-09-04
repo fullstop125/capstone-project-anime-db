@@ -14,8 +14,8 @@
 
 
 ## live preview
-Not Available yet.
 
+[anime website demo](https://fullstop125.github.io/capstone-project-anime-db/dist/)
 
 ## Getting Started
 
