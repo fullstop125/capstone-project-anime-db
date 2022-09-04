@@ -4,9 +4,6 @@
 
 > A list of movies are shown and you can add a comment on them or like them.
 
-## [A brief about the project](https://drive.google.com/file/d/1hcB7XQrD2Pwnj7o61Nxnc9TL4wojA7fu/view?usp=sharing)
-
-
 ## Built With
 
 - HTML, CSS & JavaScript.
