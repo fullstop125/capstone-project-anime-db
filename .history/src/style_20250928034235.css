@@ -1,0 +1,122 @@
+/*
+  Full UI revamp - single-file modern theme
+  - Clean variables
+  - Glassmorphism cards with neon accents
+  - Smooth image fade-in and micro-animations
+  - Compact, readable responsive layout
+*/
+
+:root{
+  --bg-0: #060712;
+  --bg-1: #0b1530;
+  --panel: rgba(255,255,255,0.04);
+  --muted: #9fb0c8;
+  --accent-primary: #7f5bff;
+  --accent-secondary: #ff6b81;
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.02);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Roboto', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg,var(--bg-0) 0%, var(--bg-1) 60%);
+  color: #eaf4ff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+.container{width:94%; max-width:1200px; margin:0 auto}
+
+/* NAV */
+nav{backdrop-filter: blur(6px); background: linear-gradient(90deg, rgba(127,91,255,0.06), rgba(255,107,129,0.03)); border-bottom:1px solid rgba(255,255,255,0.03)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+.brand{display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none}
+.brand img{width:48px; height:48px; border-radius:10px}
+.brand .title{font-weight:800; font-size:1.05rem}
+.brand .sub{font-size:0.82rem; color:var(--muted)}
+.nav-links{display:flex; gap:12px; align-items:center}
+.nav-links a{color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:10px}
+.nav-links a:hover{color:var(--accent-primary); background:var(--glass)}
+.theme-toggle{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+/* HERO */
+.hero{display:flex; gap:28px; align-items:center; padding:48px 0}
+.hero .left{flex:1}
+.kicker{display:inline-block; padding:6px 10px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#fff; border-radius:999px; font-weight:700; font-size:0.8rem}
+.hero h1{font-size:2.6rem; margin:12px 0; line-height:1.02}
+.hero p{color:var(--muted); max-width:60ch}
+.cta{display:inline-block; margin-top:18px; padding:12px 20px; border-radius:12px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; text-decoration:none}
+
+/* Filters */
+.filters{display:flex; gap:12px; align-items:center; margin-bottom:18px}
+.filters input, .filters select{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+
+/* GRID */
+.grid{display:grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap:20px}
+.movie-card{position:relative; overflow:hidden; border-radius:14px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: 0 8px 30px rgba(3,6,20,0.6); transition: transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s, border-color .25s}
+.movie-card:hover{transform:translateY(-10px); box-shadow: 0 30px 60px rgba(3,6,20,0.85); border-color: rgba(127,91,255,0.35)}
+.poster{width:100%; height:320px; object-fit:cover; display:block; opacity:0; transform:scale(1.03); transition: opacity .6s ease, transform .6s ease;}
+.poster.loaded{opacity:1; transform:scale(1)}
+.meta{padding:14px}
+.title{font-weight:800; margin:0 0 6px; font-size:1.05rem}
+.sub{color:var(--muted); font-size:0.95rem}
+
+/* overlay actions */
+.overlay{position:absolute; top:12px; right:12px; display:flex; gap:8px}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:12px; background:rgba(0,0,0,0.25); color:#fff; border:1px solid rgba(255,255,255,0.03); cursor:pointer}
+.likes{display:inline-flex; gap:8px; align-items:center; color:var(--muted)}
+
+/* like badge and animation */
+.like-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:linear-gradient(90deg, rgba(127,91,255,0.12), rgba(255,107,129,0.06)); color:#fff; font-weight:700}
+.heart-pop{display:inline-block; transition: transform .28s cubic-bezier(.2,.9,.3,1)}
+.heart-pop.pop{transform:scale(1.28) rotate(-8deg)}
+.heart-burst{position:absolute; width:12px; height:12px; background:var(--accent-secondary); border-radius:50%; opacity:0; pointer-events:none}
+.burst-anim{animation:burst 700ms forwards}
+@keyframes burst{0%{opacity:1; transform:translateY(0) scale(.6)}50%{opacity:1; transform:translateY(-14px) scale(1.05)}100%{opacity:0; transform:translateY(-28px) scale(1.6)}}
+
+/* subtle tilt on hover */
+.meta{transform-origin:50% 0; transition:transform .35s}
+.movie-card:hover .meta{transform:translateY(-6px)}
+
+#modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(1,2,7,0.6); z-index:60; pointer-events:none}
+.modal-open #modal{display:flex; pointer-events:auto}
+.modal-inner{width:100%; max-width:920px; background:linear-gradient(180deg,#081024 0%, #071022 100%); padding:22px; border-radius:14px; border:1px solid rgba(255,255,255,0.04)}
+.modal-inner .close{position:absolute; right:18px; top:18px; background:transparent; border:0; color:var(--muted); font-size:20px}
+.modal-inner .content{display:grid; grid-template-columns: 1fr 1fr; gap:18px}
+.modal-inner img{width:100%; border-radius:10px}
+.modal-inner h2{margin:0}
+.comments{display:flex; flex-direction:column; gap:10px; max-height:320px; overflow:auto}
+.comment{padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.02)}
+
+/* sticker styling */
+.sticker-wrap{position:relative; display:flex; align-items:center; justify-content:center; padding:24px}
+.sticker{width:240px; height:240px; object-fit:cover; border-radius:50%; border:6px solid rgba(255,255,255,0.06); box-shadow: 0 20px 50px rgba(2,6,23,0.6); transform-origin:center center; opacity:0; transform: scale(0.96); transition:opacity .45s ease, transform .45s cubic-bezier(.2,.9,.3,1)}
+.sticker.loaded{opacity:1; transform: scale(1)}
+.sticker-badge{position:absolute; bottom:18px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); padding:8px 12px; border-radius:999px; color:#051026; font-weight:800; box-shadow: 0 6px 24px rgba(127,91,255,0.12)}
+
+/* modal entrance animation */
+.modal-inner{opacity:0; transform:translateY(8px) scale(.98); transition:opacity .34s ease, transform .34s cubic-bezier(.2,.9,.3,1)}
+.modal-open .modal-inner{opacity:1; transform:translateY(0) scale(1)}
+
+
+/* Footer */
+footer{padding:28px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,0.03); margin-top:36px}
+
+/* Responsive */
+@media(max-width:880px){
+  .hero h1{font-size:1.9rem}
+  .poster{height:220px}
+  .modal-inner .content{grid-template-columns:1fr}
+}
+
+/* Accessibility focus states */
+button:focus, a:focus, input:focus, select:focus, textarea:focus{outline:3px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+/* small utilities */
+.hidden{display:none}
+
+/* keep some compatibility styles for older markup */
+.movie-list{display:flex; flex-wrap:wrap}
+

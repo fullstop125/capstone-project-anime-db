@@ -1,0 +1,416 @@
+/* Revamped glassmorphism + neon accent theme */
+:root{
+  --bg:#071227;
+  --panel: rgba(255,255,255,0.03);
+  --soft:#9fb0c8;
+  --accent:#7f5bff; /* purple-ish accent */
+  --accent-2:#ff6b81; /* warm secondary accent */
+  --glass: rgba(255,255,255,0.04);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; font-family: 'Cocogoose', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(180deg,#05060a 0%, #071227 60%); color:#eaf4ff; -webkit-font-smoothing:antialiased}
+.container{width:92%; max-width:1200px; margin:0 auto}
+
+/* NAV */
+nav{backdrop-filter: blur(6px); background: linear-gradient(90deg, rgba(127,91,255,0.06), rgba(255,107,129,0.03)); border-bottom:1px solid rgba(255,255,255,0.03)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:18px 0}
+.brand{display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none}
+.brand img{width:48px; height:48px; border-radius:10px}
+.brand .title{font-weight:800; font-size:1.2rem}
+.brand .sub{font-size:0.85rem; color:var(--soft)}
+.nav-links{display:flex; gap:12px}
+.nav-links a{color:var(--soft); text-decoration:none; padding:8px 12px; border-radius:10px}
+.nav-links a:hover{color:var(--accent); background:var(--glass)}
+
+/* HERO */
+.hero{display:flex; gap:28px; align-items:center; padding:48px 0}
+.hero .left{flex:1}
+.kicker{display:inline-block; padding:6px 10px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; border-radius:999px; font-weight:700; font-size:0.8rem}
+.hero h1{font-size:2.4rem; margin:12px 0; line-height:1.05}
+.hero p{color:var(--soft); max-width:60ch}
+.cta{display:inline-block; margin-top:18px; padding:12px 20px; border-radius:12px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#051026; font-weight:800; text-decoration:none}
+
+/* Filters */
+.filters{display:flex; gap:12px; align-items:center; margin-bottom:18px}
+.filters input, .filters select{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+
+/* GRID */
+.grid{display:grid; grid-template-columns: repeat(auto-fill,minmax(230px,1fr)); gap:20px}
+.card{position:relative; overflow:hidden; border-radius:14px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: 0 10px 30px rgba(3,6,20,0.7); transition: transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s, border-color .25s}
+.card:hover{transform:translateY(-10px); box-shadow: 0 30px 60px rgba(3,6,20,0.85); border-color: rgba(127,91,255,0.45)}
+.card .poster{width:100%; height:300px; object-fit:cover; display:block; opacity:0; transform:scale(1.03); transition: opacity .6s ease, transform .6s ease;}
+.poster.loaded{opacity:1; transform:scale(1)}
+.card .meta{padding:14px}
+.card .title{font-weight:800; margin:0 0 6px}
+.card .sub{color:var(--soft); font-size:0.95rem}
+
+/* overlay actions */
+.card .overlay{position:absolute; top:12px; right:12px; display:flex; gap:8px}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; background:rgba(0,0,0,0.25); color:#fff; border:1px solid rgba(255,255,255,0.03); cursor:pointer}
+.likes{display:inline-flex; gap:8px; align-items:center; color:var(--soft)}
+
+/* like badge */
+.like-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 8px; border-radius:999px; background:linear-gradient(90deg, rgba(127,91,255,0.12), rgba(255,107,129,0.06)); color:#fff; font-weight:700}
+.like-badge .heart-pop{display:inline-block; transition: transform .3s ease}
+.like-badge.pop .heart-pop{transform:scale(1.3) rotate(-10deg)}
+
+/* heart burst */
+.heart-burst{position:absolute; width:14px; height:14px; background:radial-gradient(circle at 30% 30%, #fff 0%, rgba(255,255,255,0.6) 30%, transparent 60%); border-radius:50%; opacity:0; transform:translateY(0) scale(0.6); pointer-events:none}
+.burst-anim{animation:burst 700ms forwards}
+@keyframes burst{
+  0%{opacity:1; transform:translateY(0) scale(0.6)}
+  50%{opacity:1; transform:translateY(-18px) scale(1.1)}
+  100%{opacity:0; transform:translateY(-36px) scale(1.6)}
+}
+
+/* subtle tilt on hover */
+.card .meta{transform-origin:50% 0; transition:transform .35s}
+.card:hover .meta{transform:translateY(-6px)}
+
+/* Modal */
+.modal-backdrop{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(2,6,23,0.7), rgba(2,6,23,0.8)); z-index:60}
+.modal{width:100%; max-width:920px; background:linear-gradient(180deg,#081024 0%, #071022 100%); padding:22px; border-radius:14px; border:1px solid rgba(255,255,255,0.04)}
+.modal .close{position:absolute; right:18px; top:18px; background:transparent; border:0; color:var(--soft); font-size:20px}
+.modal .content{display:grid; grid-template-columns: 1fr 1fr; gap:18px}
+.modal img{width:100%; border-radius:10px}
+.modal h2{margin:0}
+.comments{display:flex; flex-direction:column; gap:10px; max-height:260px; overflow:auto}
+.comment{padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.02)}
+.form-row{display:flex; gap:8px; margin-top:8px}
+.form-row input, .form-row textarea{padding:10px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.04); color:inherit}
+
+/* Footer */
+footer{padding:28px 0; color:var(--soft); border-top:1px solid rgba(255,255,255,0.03); margin-top:36px}
+
+/* Small screens */
+@media(max-width:880px){
+  .hero h1{font-size:1.8rem}
+  .card .poster{height:220px}
+  .modal .content{grid-template-columns:1fr}
+}
+
+/* accessibility focus states */
+button:focus, a:focus, input:focus, select:focus, textarea:focus{outline:3px solid rgba(127,91,255,0.14); outline-offset:3px}
+@font-face {
+  font-family: cocogoose;
+  src:
+    url(fonts/cocogoose.ttf),
+    url(fonts/cocogoose-bold.ttf);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  background: #000;
+}
+
+.logo {
+  content: url('./icons&imgs/dynasty-logo-plain.png');
+  width: 50px;
+  height: 50px;
+  font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+  background-color: #2e0249;
+}
+
+.movie-list {
+  margin-top: 10%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movie-list li {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  background: #272727;
+}
+
+.movie-list li img {
+  width: 300px;
+  height: auto;
+  border-radius: 12px;
+}
+
+.movie-list li h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  margin-top: auto;
+  padding: 15px 10px 0;
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comments {
+  width: 95%;
+  margin: 16px;
+}
+
+.card {
+  width: 98%;
+  border-radius: 8px;
+  background: #e1e0e0;
+  color: #27003f;
+  margin: 4px;
+}
+
+.comment-head {
+  padding: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: 'cocogoose', sans-serif;
+}
+
+.date {
+  font-family: 'Roboto', sans-serif;
+}
+
+.comment-block {
+  padding: 9px;
+  font-family: 'Roboto', sans-serif;
+}
+
+small {
+  display: none;
+}
+
+small.show {
+  display: block;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap');
+
+footer {
+  box-sizing: border-box;
+  position: relative;
+  margin: 5px 0 0 0;
+  background-color: #080a1a;
+  color: #fff;
+  font-style: normal;
+  padding: 4px 0 10px;
+  line-height: 24px;
+  font-family: 'Tajawal', sans-serif;
+  word-break: normal;
+  border-radius: 10px;
+  box-shadow: 2px 6px 60px 20px rgba(0, 0, 0, 0.1);
+}
+
+.row-footer {
+  padding: 3px 20px 3px 20px;
+  margin-top: 26px;
+}
+
+.row-footer::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oregano&display=swap');
+
+.site-logo {
+  float: left;
+  width: 15%;
+  padding: 10px;
+}
+
+.site-logo span {
+  font-family: 'Oregano', cursive;
+  font-size: 20px;
+}
+
+.main-nav {
+  position: absolute;
+  top: 40%;
+  left: 6%;
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  height: -1px;
+  box-shadow: 2px 2px 60px 8px rgba(102, 98, 98, 0.5);
+}
+
+.follow-icons .social {
+  margin: 0 5px;
+  list-style: none;
+}
+
+.main-nav li {
+  list-style: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #000;
+  transform: rotate(45deg);
+  transition: 0.5s;
+  margin: -30px;
+  opacity: 0.5;
+}
+
+.main-nav li:hover {
+  opacity: 1;
+}
+
+.main-nav li span {
+  margin-left: 6.5px;
+}
+
+.main-nav li.item1 {
+  top: 0;
+  left: 0;
+  color: #00a9c7;
+}
+
+.main-nav li.item2 {
+  bottom: 0;
+  left: 25%;
+  color: red;
+}
+
+.main-nav li.item3 {
+  top: 0;
+  left: 50%;
+  color: yellowgreen;
+}
+
+.main-nav li.item4 {
+  bottom: 0;
+  left: 75%;
+  color: darkmagenta;
+}
+
+.site-links {
+  float: left;
+  width: 20%;
+  padding: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+
+ul.list-links {
+  list-style-type: none;
+}
+
+.follow-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.follow-icons .social i {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.follow-icons .social span {
+  padding-right: 6px;
+}
+
+.arrow {
+  visibility: visible;
+  padding-right: 15px;
+  position: relative;
+  animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+  0% {
+    left: 0;
+  }
+
+  25% {
+    left: 15px;
+  }
+
+  50% {
+    left: 0;
+  }
+
+  75% {
+    left: 15px;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+.right-dis {
+  float: right;
+}
+
+.left-dis {
+  float: left;
+}
+
+@media (max-width: 900px) {
+  .site-logo {
+    float: left;
+    width: 28%;
+    padding: 10px;
+  }
+
+  .site-links span {
+    font-family: 'Gruppo', cursive;
+  }
+
+  ul.list-links li {
+    font-size: 20px;
+    margin-left: -38px;
+  }
+
+  .main-nav {
+    top: 30%;
+    left: 12%;
+  }
+
+  .site-links {
+    float: left;
+    width: 20%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .right-dis {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .dist {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+ul {
+  display: flex;
+}

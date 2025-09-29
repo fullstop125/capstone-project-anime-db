@@ -1,0 +1,332 @@
+/*
+  Full UI revamp - single-file modern theme
+  - Clean variables
+  - Glassmorphism cards with neon accents
+  - Smooth image fade-in and micro-animations
+  - Compact, readable responsive layout
+*/
+
+:root{
+  /* Light theme (default) */
+  --bg-0: #f6f8fb; /* page background */
+  --bg-1: #e9eef7; /* subtle gradient */
+  --panel: rgba(6,18,38,0.03);
+  --muted: #556b82;
+  --accent-primary: #3b82f6; /* blue */
+  --accent-secondary: #06b6d4; /* teal */
+  --glass: rgba(6,18,38,0.04);
+  --glass-2: rgba(6,18,38,0.02);
+  --text: #07122a;
+  --panel-contrast: #ffffff;
+  /* motion & timing */
+  --hover-duration: 720ms;
+  --hover-ease: cubic-bezier(.16,.84,.24,1);
+  --poster-duration: 920ms;
+}
+
+/* Dark theme overrides */
+.dark{
+  --bg-0: #060712;
+  --bg-1: #0b1530;
+  --panel: rgba(255,255,255,0.04);
+  --muted: #9fb0c8;
+  --accent-primary: #7f5bff;
+  --accent-secondary: #ff6b81;
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.02);
+  --text: #eaf4ff;
+  --panel-contrast: rgba(4,6,12,0.6);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Roboto', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg,var(--bg-0) 0%, var(--bg-1) 60%);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  transition: background .45s ease, color .35s ease;
+}
+.container{width:94%; max-width:1200px; margin:0 auto}
+
+/* Smooth transitions for many UI elements during theme switch */
+nav, .movie-card, .modal-inner, .poster, .meta, .badge, .sticker, .comments, .confirm-box{transition: background var(--hover-duration) var(--hover-ease), color calc(var(--hover-duration) / 2) var(--hover-ease), box-shadow var(--hover-duration) var(--hover-ease), border-color calc(var(--hover-duration) / 2) var(--hover-ease)}
+
+/* NAV */
+nav{backdrop-filter: blur(6px); background: linear-gradient(90deg, rgba(127,91,255,0.06), rgba(255,107,129,0.03)); border-bottom:1px solid rgba(255,255,255,0.03)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+.brand{display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none}
+.brand img{width:48px; height:48px; border-radius:10px}
+.brand .title{font-weight:800; font-size:1.05rem}
+.brand .sub{font-size:0.82rem; color:var(--muted)}
+.nav-links{display:flex; gap:12px; align-items:center}
+.nav-links a{color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:10px}
+.nav-links a:hover{color:var(--accent-primary); background:var(--glass)}
+.theme-toggle{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+/* theme toggle pulse */
+.theme-toggle.pulse{animation:togglePulse .44s cubic-bezier(.2,.9,.3,1)}
+@keyframes togglePulse{0%{transform:scale(.98)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+/* HERO */
+.hero{display:flex; gap:28px; align-items:center; padding:48px 0}
+.hero .left{flex:1}
+.kicker{display:inline-block; padding:6px 10px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#fff; border-radius:999px; font-weight:700; font-size:0.8rem}
+.hero h1{font-size:2.6rem; margin:12px 0; line-height:1.02}
+.hero p{color:var(--muted); max-width:60ch}
+.cta{display:inline-block; margin-top:18px; padding:12px 20px; border-radius:12px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; text-decoration:none}
+
+/* Filters */
+.filters{display:flex; gap:12px; align-items:center; margin-bottom:18px}
+.filters input, .filters select{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+
+/* GRID */
+.grid{display:grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap:20px}
+.movie-card{position:relative; overflow:hidden; border-radius:14px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: 0 8px 30px rgba(3,6,20,0.6); transition: transform var(--hover-duration) var(--hover-ease), box-shadow var(--hover-duration), border-color var(--hover-duration)}
+.movie-card:hover{transform:translateY(-10px); box-shadow: 0 30px 60px rgba(3,6,20,0.85); border-color: rgba(127,91,255,0.35)}
+.poster{width:100%; height:320px; object-fit:cover; display:block; opacity:0; transform:scale(1.03); transition: opacity var(--poster-duration) var(--hover-ease), transform var(--poster-duration) var(--hover-ease);}
+.poster.loaded{opacity:1; transform:scale(1)}
+.meta{padding:14px}
+.title{font-weight:800; margin:0 0 6px; font-size:1.05rem}
+.sub{color:var(--muted); font-size:0.95rem}
+
+/* overlay actions */
+.overlay{position:absolute; top:12px; right:12px; display:flex; gap:8px}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:12px; background:rgba(0,0,0,0.25); color:#fff; border:1px solid rgba(255,255,255,0.03); cursor:pointer}
+.likes{display:inline-flex; gap:8px; align-items:center; color:var(--muted)}
+
+/* ===== Premium card visuals (rich, cinematic) ===== */
+.card-inner{position:relative; border-radius:14px; overflow:hidden; background:linear-gradient(180deg, rgba(6,10,20,0.35), rgba(6,8,16,0.25)); box-shadow: 0 18px 50px rgba(2,6,23,0.55); transition: transform var(--hover-duration) var(--hover-ease), box-shadow var(--hover-duration)}
+.movie-card{background:transparent; border:none}
+.movie-card .card-inner{transform-origin:center center}
+
+/* decorative gradient rim using pseudo element */
+.movie-card::before{content:""; position:absolute; inset:0; z-index:0; border-radius:16px; padding:2px; background:linear-gradient(135deg, rgba(127,91,255,0.14), rgba(255,107,129,0.08)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); pointer-events:none}
+
+.poster-wrap{position:relative; overflow:hidden; border-radius:12px 12px 0 0; z-index:1}
+.poster{width:100%; height:360px; object-fit:cover; display:block; transition: transform var(--poster-duration) var(--hover-ease), filter var(--poster-duration) var(--hover-ease)}
+.movie-card:hover .card-inner{transform:translateY(-10px) scale(1.02); box-shadow: 0 40px 90px rgba(2,6,23,0.7)}
+.movie-card:hover .poster{transform:scale(1.08) translateY(-8px); filter:brightness(1.03) saturate(1.06)}
+
+/* play overlay */
+.play-overlay{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.86); z-index:3; width:86px; height:86px; border-radius:50%; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity var(--hover-duration) var(--hover-ease), transform var(--hover-duration) var(--hover-ease)}
+.movie-card:hover .play-overlay{opacity:1; transform:translate(-50%,-50%) scale(1)}
+.play-overlay i{color:#051026; font-size:26px}
+
+/* badge */
+.badge{position:absolute; left:12px; top:12px; z-index:4; padding:6px 10px; border-radius:999px; background:rgba(0,0,0,0.45); color:#fff; font-weight:800; box-shadow: 0 8px 28px rgba(2,6,23,0.6)}
+
+.meta{padding:14px; position:relative; z-index:2}
+.title{font-weight:800; margin:0 0 6px; font-size:1.05rem}
+.card-meta{display:flex; justify-content:space-between; gap:12px; align-items:center}
+.info-strip{margin-top:10px; color:var(--muted); font-size:0.95rem; max-height:48px; overflow:hidden}
+.actions{display:flex; gap:10px; margin-top:12px}
+
+/* shimmer for new badges */
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.badge.new{position:relative; overflow:hidden}
+.badge.new::after{content:""; position:absolute; inset:0; transform:translateX(-120%); background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.16), rgba(255,255,255,0.06)); animation:shimmer 1.8s linear infinite}
+
+/* responsive adjustments */
+@media (max-width:880px){
+  .poster{height:260px}
+  .poster-wrap .badge{left:8px; top:8px}
+}
+
+/* favorite button */
+.fav-btn{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04)}
+.fav-btn.active{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026}
+
+/* toasts */
+.toast-wrap{position:fixed; left:50%; transform:translateX(-50%); top:22px; z-index:9999; display:flex; flex-direction:column; gap:10px; align-items:center}
+.toast{min-width:220px; padding:10px 14px; border-radius:10px; background:rgba(2,6,23,0.9); color:#eaf4ff; box-shadow:0 14px 40px rgba(4,6,20,0.6); opacity:0; transform:translateY(-8px) scale(.98); transition:opacity .28s, transform .28s}
+.toast.show{opacity:1; transform:translateY(0) scale(1)}
+
+/* keyboard helper */
+.kbd-hint{position:fixed; right:18px; bottom:18px; z-index:900; background:rgba(255,255,255,0.02); color:var(--muted); padding:8px 10px; border-radius:10px; font-size:0.9rem}
+
+/* focus trap overlay (visual only) */
+.focus-trap{outline:3px solid rgba(127,91,255,0.12); outline-offset:4px}
+
+
+
+/* like badge and animation */
+.like-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:linear-gradient(90deg, rgba(127,91,255,0.12), rgba(255,107,129,0.06)); color:#fff; font-weight:700}
+.heart-pop{display:inline-block; transition: transform .28s cubic-bezier(.2,.9,.3,1)}
+.heart-pop.pop{transform:scale(1.28) rotate(-8deg)}
+.heart-burst{position:absolute; width:12px; height:12px; background:var(--accent-secondary); border-radius:50%; opacity:0; pointer-events:none}
+.burst-anim{animation:burst 700ms forwards}
+@keyframes burst{0%{opacity:1; transform:translateY(0) scale(.6)}50%{opacity:1; transform:translateY(-14px) scale(1.05)}100%{opacity:0; transform:translateY(-28px) scale(1.6)}}
+
+/* subtle tilt on hover */
+.meta{transform-origin:50% 0; transition:transform .35s}
+.movie-card:hover .meta{transform:translateY(-6px)}
+
+#modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(1,2,7,0.6); z-index:60; pointer-events:none}
+.modal-open #modal{display:flex; pointer-events:auto}
+.modal-inner{width:100%; max-width:920px; background:linear-gradient(180deg,#081024 0%, #071022 100%); padding:22px; border-radius:14px; border:1px solid rgba(255,255,255,0.04)}
+.modal-inner .close{position:absolute; right:18px; top:18px; background:transparent; border:0; color:var(--muted); font-size:20px}
+.modal-inner .content{display:grid; grid-template-columns: 1fr 1fr; gap:18px}
+.modal-inner img{width:100%; border-radius:10px}
+.modal-inner h2{margin:0}
+.comments{display:flex; flex-direction:column; gap:10px; max-height:320px; overflow:auto}
+.comment{padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.02)}
+
+/* sticker styling */
+.sticker-wrap{position:relative; display:flex; align-items:center; justify-content:center; padding:24px}
+.sticker{width:240px; height:240px; object-fit:cover; border-radius:50%; border:6px solid rgba(255,255,255,0.06); box-shadow: 0 20px 50px rgba(2,6,23,0.6); transform-origin:center center; opacity:0; transform: scale(0.96); transition:opacity .45s ease, transform .45s cubic-bezier(.2,.9,.3,1)}
+.sticker.loaded{opacity:1; transform: scale(1)}
+.sticker-badge{position:absolute; bottom:18px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); padding:8px 12px; border-radius:999px; color:#051026; font-weight:800; box-shadow: 0 6px 24px rgba(127,91,255,0.12)}
+
+/* modal entrance animation */
+.modal-inner{opacity:0; transform:translateY(8px) scale(.98); transition:opacity .34s ease, transform .34s cubic-bezier(.2,.9,.3,1)}
+.modal-open .modal-inner{opacity:1; transform:translateY(0) scale(1)}
+
+/* Ensure modal content fits viewport: keep close button visible by making modal scroll internally */
+.modal-inner{max-height:86vh; overflow:auto}
+.modal-inner .close{position:sticky; top:12px; z-index:30; float:right; margin-right:6px}
+.modal-inner .content{margin-top:12px}
+
+/* comment enter/exit animations */
+.comment{transition:opacity .28s ease, transform .32s ease, height .32s ease}
+.comment.enter{opacity:0; transform:translateY(8px);}
+.comment.enter.show{opacity:1; transform:translateY(0)}
+.comment.removing{opacity:0; transform:translateY(-8px); height:0; padding:0; margin:0; overflow:hidden}
+
+/* scroll-to-top floating button inside modal */
+#modal-scroll-top{position:fixed; right:22px; bottom:22px; z-index:80; display:none; width:44px; height:44px; border-radius:10px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 36px rgba(7,12,30,0.6); cursor:pointer}
+#modal-scroll-top.show{display:flex}
+
+
+
+/* Footer */
+footer{padding:28px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,0.03); margin-top:36px}
+
+/* Responsive */
+@media(max-width:880px){
+  .hero h1{font-size:1.9rem}
+  .poster{height:220px}
+  .modal-inner .content{grid-template-columns:1fr}
+}
+
+/* Accessibility focus states */
+button:focus, a:focus, input:focus, select:focus, textarea:focus{outline:3px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+/* small utilities */
+.hidden{display:none}
+
+/* keep some compatibility styles for older markup */
+.movie-list{display:flex; flex-wrap:wrap}
+
+
+/* ==========================================
+   Enhanced details modal & micro-animations
+   - richer backdrop blur and transitions
+   - decorative ring behind sticker
+   - sticker entrance animation
+   - comment list polish and form styling
+   - card hover sheen
+ ========================================== */
+
+/* Backdrop transition and subtle blur when modal opens */
+#modal{transition:background-color .36s ease, backdrop-filter .36s ease}
+.modal-open #modal{backdrop-filter: blur(8px); background: rgba(2,6,18,0.66)}
+
+/* modal shell enhancements */
+.modal-inner{position:relative; overflow:visible; padding:26px; border-radius:14px}
+.modal-inner::before{content:""; position:absolute; inset:0; pointer-events:none; border-radius:14px; mix-blend-mode:overlay; background:linear-gradient(120deg, rgba(127,91,255,0.02), rgba(255,107,129,0.01));}
+
+.close{background:rgba(2,6,23,0.45); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); transition:transform .18s ease, background .18s ease}
+.close:hover{transform:scale(1.06); background:rgba(255,255,255,0.03)}
+
+/* sticker decorative ring and entrance */
+.sticker-wrap{position:relative; display:flex; align-items:center; justify-content:center; padding:18px}
+.sticker-wrap::before{content:""; position:absolute; width:380px; height:380px; border-radius:50%; left:50%; top:46%; transform:translate(-50%,-50%) scale(.88); background: radial-gradient(closest-side, rgba(127,91,255,0.14), transparent 48%), radial-gradient(closest-side, rgba(255,107,129,0.08), transparent 40%); filter:blur(18px) saturate(110%); opacity:0; transition: opacity var(--hover-duration) var(--hover-ease), transform var(--hover-duration) var(--hover-ease); z-index:0}
+.modal-open .sticker-wrap::before{opacity:1; transform:translate(-50%,-50%) scale(1)}
+
+.sticker{position:relative; z-index:1; width:260px; height:260px; border-radius:50%; border:6px solid rgba(255,255,255,0.06); box-shadow: 0 30px 80px rgba(7,12,30,0.7); transform-origin:center; opacity:0; transform:translateY(8px) scale(.94) rotate(-6deg); transition: box-shadow var(--hover-duration), transform var(--hover-duration) var(--hover-ease), opacity calc(var(--hover-duration) / 1.8) var(--hover-ease)}
+.modal-open .sticker{opacity:1; transform:translateY(0) scale(1) rotate(0); animation:stickerIn .52s cubic-bezier(.18,.9,.25,1)}
+
+@keyframes stickerIn{
+  0%{opacity:0; transform:translateY(12px) scale(.78) rotate(-8deg)}
+  60%{transform:translateY(-8px) scale(1.06) rotate(6deg)}
+ 100%{opacity:1; transform:translateY(0) scale(1) rotate(0)}
+}
+
+/* modal content typography */
+.modal-inner .title{font-size:1.45rem; margin-bottom:6px}
+.modal-inner .sub{color:var(--muted); line-height:1.6}
+
+/* comments styling */
+.comments{display:flex; flex-direction:column; gap:12px; max-height:360px; overflow:auto; padding:6px}
+.comments::-webkit-scrollbar{width:10px}
+.comments::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--accent-primary),var(--accent-secondary)); border-radius:999px}
+.comment{display:flex; gap:12px; align-items:flex-start; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); border-radius:10px; border:1px solid rgba(255,255,255,0.02)}
+.comment .avatar{width:44px; height:44px; border-radius:10px; flex:0 0 44px; background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary)); display:flex; align-items:center; justify-content:center; color:#051026; font-weight:800}
+.comment .body{flex:1}
+.comment .meta{display:flex; gap:8px; align-items:center; font-size:0.82rem; color:var(--muted); margin-bottom:6px}
+.comment p{margin:0; color:#e6f6ff}
+
+/* comment form */
+form{display:flex; flex-direction:column; gap:10px; margin-top:10px}
+form input[type="text"], form textarea{padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:inherit; resize:vertical}
+form textarea{min-height:84px}
+form button#submitComment{align-self:flex-start; padding:10px 14px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; border-radius:10px; border:none; cursor:pointer; transition:transform .18s, box-shadow .18s}
+form button#submitComment:hover{transform:translateY(-2px); box-shadow:0 10px 30px rgba(127,91,255,0.12)}
+small#small{color:#ffadb3}
+
+/* subtle card sheen on hover */
+.movie-card{position:relative; overflow:visible}
+.movie-card::after{content:""; position:absolute; left:-40%; top:-30%; width:40%; height:180%; transform:rotate(24deg) translateX(-120%); background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12), rgba(255,255,255,0.02)); opacity:0; transition: transform var(--hover-duration) var(--hover-ease), opacity calc(var(--hover-duration) / 1.2) var(--hover-ease)}
+.movie-card:hover::after{transform:rotate(24deg) translateX(220%); opacity:0.18}
+
+/* responsive: make sticker smaller on narrow screens */
+@media(max-width:620px){
+  .sticker-wrap::before{width:280px; height:280px}
+  .sticker{width:200px; height:200px}
+}
+
+/* comment close/delete button */
+.comment{position:relative; padding:12px}
+.comment-close{background:transparent; border:0; color:var(--muted); font-size:20px; line-height:1; cursor:pointer; padding:6px 8px; border-radius:8px; transition:background .16s, color .16s}
+.comment-close{opacity:0; transform:translateY(-2px); transition:opacity .18s ease, transform .18s ease}
+.comment:focus-within .comment-close, .comment:hover .comment-close{opacity:1; transform:translateY(0)}
+.comment-close:hover{background:rgba(255,255,255,0.03); color:var(--accent-secondary)}
+
+/* inline confirm box styling */
+.confirm-box{margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 10px; border-radius:10px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03)}
+.confirm-box span{color:var(--muted); font-size:0.92rem}
+.confirm-actions{display:flex; gap:8px}
+.confirm-actions button{padding:8px 10px; border-radius:8px; border:0; cursor:pointer}
+.confirm-actions .confirm-yes{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:700}
+.confirm-actions .confirm-no{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+/* ===== Smooth reveal, tilt & shine for premium cards ===== */
+:root{ --card-pop-duration: 520ms; --card-ease: cubic-bezier(.18,.9,.25,1) }
+
+/* starting state for cards, then JS will add .show to stagger-in */
+.movie-card{opacity:0; transform:translateY(18px); transition:opacity .56s var(--card-ease), transform .56s var(--card-ease)}
+.movie-card.show{opacity:1; transform:translateY(0)}
+
+/* apply 3D tilt to inner surface so we can animate without conflicting with outer translate */
+.card-inner{transition:transform .28s ease, box-shadow .28s ease}
+.card-inner:hover{box-shadow: 0 50px 110px rgba(2,6,23,0.75)}
+
+/* shine overlay controlled by CSS variable set by pointermove */
+.poster-wrap::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); mix-blend-mode:overlay; opacity:0; transform:translateX(-30%); transition: opacity calc(var(--hover-duration) / 2) var(--hover-ease), transform calc(var(--hover-duration) / 2) var(--hover-ease)}
+.movie-card:hover .poster-wrap::after{opacity:0.18}
+.poster-wrap{--shine-x:50%;}
+.poster-wrap::after{background: radial-gradient(1200px circle at var(--shine-x) 30%, rgba(255,255,255,0.14), transparent 10%)}
+
+/* subtle floating micro animation for idle cards */
+.movie-card.idle{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+
+/* small accessibility: make actions more visible on focus */
+.actions .icon-btn:focus{outline:2px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+
+
+

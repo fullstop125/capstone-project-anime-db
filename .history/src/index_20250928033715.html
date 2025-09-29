@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="./icons&imgs/dynasty-logo-plain.png"
+      type="image/x-icon"
+      sizes="96x96"
+    />
+    <title>Dynasty Ent</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner container">
+        <a class="brand" href="#">
+          <img src="./icons&imgs/dynasty-logo-plain.png" alt="logo" />
+          <div>
+            <div class="title">Dynasty Entertainment</div>
+            <div class="sub muted">Anime curated with love</div>
+          </div>
+        </a>
+        <div class="nav-links">
+          <a href="#">Animes(<span id="animesNum">0</span>)</a>
+          <a href="#">Newest</a>
+          <a href="#">Rank</a>
+          <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme" class="theme-toggle" style="margin-left:12px;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <header class="container hero">
+      <div class="left">
+        <div class="kicker">Handpicked · Exclusive</div>
+        <h1>Discover your next favorite anime</h1>
+        <p>Explore trending, award-winning and fan-favorite titles. Click a card to view synopsis and comments.</p>
+        <a class="cta" href="#">Explore Now</a>
+      </div>
+      <div class="right">
+        <!-- optional visual / illustration -->
+        <img src="./icons&imgs/dynasty-logo.svg" alt="visual" style="opacity:0.12; max-width:320px;"/>
+      </div>
+    </header>
+
+    <section class="container" aria-label="anime gallery">
+      <div class="filters" style="margin-bottom:18px; display:flex; gap:10px; align-items:center;">
+        <input id="search" placeholder="Search titles..." style="flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit" />
+        <select id="sort" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit">
+          <option value="ranking">Top Ranked</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+
+      <div id="movie-list" class="grid">
+        <!-- anime cards injected here -->
+      </div>
+    </section>
+
+    <div id="modal" class="hidden" aria-hidden="true">
+      <div class="modal-inner container">
+        <button id="close-modal" class="close" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="content">
+          <div class="left">
+            <div class="sticker-wrap">
+              <img id="modal-image" src="#" alt="anime sticker" class="sticker" />
+              <div id="sticker-badge" class="sticker-badge"> </div>
+            </div>
+          </div>
+          <div class="right">
+            <h1 id="modal-title" class="title"></h1>
+            <p id="animeDescription" class="sub" ></p>
+            <div style="margin-top:18px; border-top:1px solid rgba(255,255,255,0.03); padding-top:16px">
+              <h3>Comments (<span id="commentsNumber">0</span>)</h3>
+              <div id="comments" class="comments">
+                <!-- Comments will be injected here -->
+              </div>
+              <form class="mt-4">
+                <input type="text" id="InputName" placeholder="Your name" />
+                <textarea id="commentToPost" placeholder="Your comment"></textarea>
+                <small id="small" class="text-red-500 hidden">Both fields must be filled</small>
+                <button id="submitComment" type="submit">Post Comment</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-gray-800 mt-12">
+      <div
+        class="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center"
+      >
+        <p class="text-gray-400">
+          &copy; 2025 Dynasty Entertainment. All rights reserved.
+        </p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-github"></i
+          ></a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

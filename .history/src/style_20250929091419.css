@@ -1,0 +1,574 @@
+/*
+  Full UI revamp - single-file modern theme
+  - Clean variables
+  - Glassmorphism cards with neon accents
+  - Smooth image fade-in and micro-animations
+  - Compact, readable responsive layout
+*/
+
+:root{
+  /* Light theme (default) */
+  --bg-0: #f6f8fb; /* page background */
+  --bg-1: #e9eef7; /* subtle gradient */
+  --panel: rgba(6,18,38,0.03);
+  --muted: #556b82;
+  --accent-primary: #3b82f6; /* blue */
+  --accent-secondary: #06b6d4; /* teal */
+  --glass: rgba(6,18,38,0.04);
+  --glass-2: rgba(6,18,38,0.02);
+  --text: #07122a;
+  --panel-contrast: #ffffff;
+  /* motion & timing */
+  --hover-duration: 720ms;
+  --hover-ease: cubic-bezier(.16,.84,.24,1);
+  --poster-duration: 920ms;
+}
+
+/* Dark theme overrides */
+.dark{
+  --bg-0: #060712;
+  --bg-1: #0b1530;
+  --panel: rgba(255,255,255,0.04);
+  --muted: #9fb0c8;
+  --accent-primary: #7f5bff;
+  --accent-secondary: #ff6b81;
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.02);
+  --text: #eaf4ff;
+  --panel-contrast: rgba(4,6,12,0.6);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Roboto', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg,var(--bg-0) 0%, var(--bg-1) 60%);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  transition: background .45s ease, color .35s ease;
+}
+.container{width:94%; max-width:1200px; margin:0 auto}
+
+/* Smooth transitions for many UI elements during theme switch */
+nav, .movie-card, .modal-inner, .poster, .meta, .badge, .sticker, .comments, .confirm-box{transition: background var(--hover-duration) var(--hover-ease), color calc(var(--hover-duration) / 2) var(--hover-ease), box-shadow var(--hover-duration) var(--hover-ease), border-color calc(var(--hover-duration) / 2) var(--hover-ease)}
+
+/* NAV */
+nav{backdrop-filter: blur(6px); background: linear-gradient(90deg, rgba(127,91,255,0.06), rgba(255,107,129,0.03)); border-bottom:1px solid rgba(255,255,255,0.03)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+.brand{display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none}
+.brand img{width:52px; height:52px; border-radius:10px; transition:transform .18s var(--hover-ease), box-shadow .18s var(--hover-ease)}
+.site-nav {
+  position:sticky;
+  top:0;
+  z-index:60;
+  backdrop-filter: blur(8px) saturate(110%);
+  -webkit-backdrop-filter: blur(8px) saturate(110%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.site-nav .nav-inner.container{display:flex; align-items:center; gap:18px; padding:10px 18px}
+.nav-left .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
+.brand img{width:44px; height:44px; object-fit:contain; border-radius:8px}
+.brand-logo{display:inline-block; width:44px; height:44px; object-fit:contain; border-radius:8px}
+.brand-logo[alt=""]{visibility:hidden}
+
+/* logo wrap provides a circular backdrop that adapts per theme for clear contrast */
+.brand-logo-wrap{display:inline-grid; place-items:center; width:56px; height:56px; border-radius:12px; padding:6px; background:var(--brand-bg, rgba(255,255,255,0.06)); box-shadow:0 6px 16px rgba(2,6,23,0.35)}
+
+/* theme-aware brand background overrides */
+:root{--brand-bg: rgba(255,255,255,0.06)}
+.dark{--brand-bg: rgba(255,255,255,0.06)}
+.theme-netflix{--brand-bg: linear-gradient(90deg,#e50914,#b81d24)}
+.theme-pastel{--brand-bg: linear-gradient(90deg,#a78bfa,#f472b6)}
+.theme-warm{--brand-bg: linear-gradient(90deg,#ff7a59,#ffd66b)}
+.theme-cool{--brand-bg: linear-gradient(90deg,#6ee7ff,#7c5cff)}
+.brand-text .title{font-weight:800; letter-spacing:0.2px}
+.brand-text .sub{font-size:0.85rem; color:var(--muted)}
+
+/* Inline DE logo sizing and theme-aware styling */
+/* (DE logo removed - reverting to previous picture/PNG approach; theme-specific brand-bg rules remain above) */
+
+.nav-center{flex:1; display:flex; justify-content:center}
+.nav-search{width:640px; max-width:72%; display:flex; gap:8px; align-items:center; background:var(--glass); padding:6px; border-radius:12px}
+.nav-search input{flex:1; padding:12px 14px; border-radius:10px; border:0; background:transparent; color:inherit}
+.nav-search select{padding:10px 12px; border-radius:10px; border:0; background:transparent; color:inherit; margin-left:6px}
+
+.nav-actions{display:flex; align-items:center; gap:12px}
+.nav-feature{color:var(--muted); text-decoration:none; font-weight:700}
+.theme-picker{display:flex; gap:8px; align-items:center}
+.theme-swatch{width:28px; height:28px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.35)}
+.theme-swatch:hover{transform:translateY(-3px); transition:transform var(--hover-duration)}
+.theme-swatch:focus{outline:2px solid color-mix(in srgb, var(--accent-color) 45%, #fff); outline-offset:2px}
+.theme-toggle{padding:8px 10px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); cursor:pointer}
+
+/* responsive */
+@media (max-width: 880px){
+  .nav-search{max-width:92%; width:100%; padding:8px}
+  .brand-text .sub{display:none}
+}
+@media (max-width: 640px){
+  /* Keep search visible on small screens but compact */
+  .nav-center{display:block}
+  .nav-search{width:100%; padding:6px; border-radius:10px}
+  .site-nav .nav-inner.container{padding:8px}
+  .theme-swatch{width:24px;height:24px}
+}
+.brand:focus-within img, .brand img:focus{transform:scale(1.04); box-shadow:0 8px 30px rgba(127,91,255,0.12);}
+.brand .title{font-weight:800; font-size:1.05rem}
+.brand .sub{font-size:0.82rem; color:var(--muted)}
+.nav-links{display:flex; gap:12px; align-items:center}
+.nav-links a{color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:10px}
+.nav-links a:hover{color:var(--accent-primary); background:var(--glass)}
+.theme-toggle{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+/* theme toggle pulse */
+.theme-toggle.pulse{animation:togglePulse .44s cubic-bezier(.2,.9,.3,1)}
+@keyframes togglePulse{0%{transform:scale(.98)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+/* HERO */
+.hero{display:flex; gap:28px; align-items:center; padding:28px 0 48px}
+.hero .left{flex:1}
+.kicker{display:inline-block; padding:6px 10px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#fff; border-radius:999px; font-weight:700; font-size:0.8rem}
+.hero h1{font-size:2.6rem; margin:12px 0; line-height:1.02}
+.hero p{color:var(--muted); max-width:60ch}
+.cta{display:inline-block; margin-top:18px; padding:12px 20px; border-radius:12px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; text-decoration:none}
+
+/* Spotlight hero styles */
+.hero-spotlight{width:100%; display:flex; justify-content:center; align-items:center; padding:28px 0}
+.spotlight-card{display:grid; grid-template-columns: 520px 1fr; gap:32px; align-items:center; width:100%; max-width:1280px}
+.spotlight-poster{position:relative; border-radius:18px; overflow:hidden}
+.spotlight-poster .poster{width:520px; height:680px; object-fit:cover; display:block; border-radius:14px}
+
+/* hero background mode: make the spotlight-card itself the hero background */
+.spotlight-card.bg-hero{background-repeat:no-repeat; background-position:center; background-size:cover; border-radius:18px; padding:40px; box-shadow:0 40px 90px rgba(2,6,23,0.6); color:var(--panel-contrast)}
+.spotlight-card.bg-hero .spotlight-meta{background:linear-gradient(180deg, rgba(2,6,18,0.18), rgba(2,6,18,0.52)); padding:28px; border-radius:12px}
+.spotlight-card.bg-hero .spotlight-title{color:#fff}
+.spotlight-card.bg-hero .spotlight-sub{color:rgba(255,255,255,0.9)}
+
+/* hide the small poster on large screens when using bg hero for a cinematic layout */
+@media(min-width:900px){
+  .spotlight-card.bg-hero .spotlight-poster{display:none}
+  .spotlight-card.bg-hero{grid-template-columns: 1fr;}
+}
+.poster-overlay{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:16px}
+.poster-overlay .kicker{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; padding:8px 12px; border-radius:999px; display:inline-block}
+.poster-actions{display:flex; gap:12px; align-items:center}
+.play-btn{width:64px; height:64px; border-radius:999px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); border:0; color:#051026; font-size:22px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 12px 36px rgba(7,12,30,0.6); cursor:pointer}
+.spotlight-meta{padding:6px 0}
+.spotlight-title{font-size:2.1rem; margin:0 0 8px}
+.spotlight-sub{color:var(--muted); max-width:48ch}
+.genre-badges{display:flex; gap:8px; margin-top:14px}
+.genre-badges .badge{background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); padding:8px 10px; border-radius:999px; color:var(--muted); font-weight:800}
+.spotlight-ctas{display:flex; gap:12px; margin-top:16px}
+
+/* Carousel controls */
+.carousel-controls{display:flex; gap:12px; align-items:center; margin-top:12px; justify-content:center}
+.carousel-dots{display:flex; gap:8px; align-items:center}
+.carousel-dots .dot{width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.04); cursor:pointer; transition:transform .18s ease}
+.carousel-dots .dot.active{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); box-shadow:0 10px 28px rgba(2,6,23,0.45); transform:scale(1.12)}
+.carousel-controls .icon-btn{padding:10px 14px; border-radius:999px}
+
+@media (max-width:980px){
+  .spotlight-card{grid-template-columns: 1fr; gap:18px}
+  .spotlight-poster .poster{width:100%; height:420px}
+  .spotlight-title{font-size:1.6rem}
+}
+
+/* Filters */
+.filters{display:flex; gap:12px; align-items:center; margin-bottom:18px}
+.filters input, .filters select{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+
+/* GRID */
+.grid{display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:28px; align-items:start}
+.movie-card{position:relative; overflow:visible; border-radius:16px; padding:10px; background:transparent; transition: transform var(--hover-duration) var(--hover-ease);}
+.movie-card:hover{transform:translateY(-10px)}
+.poster{width:100%; height:420px; object-fit:cover; display:block; opacity:0; transform:scale(1.02); transition: opacity var(--poster-duration) var(--hover-ease), transform var(--poster-duration) var(--hover-ease), filter calc(var(--poster-duration) / 1.1) var(--hover-ease);} 
+.poster.loaded{opacity:1; transform:scale(1)}
+.meta{padding:14px}
+.title{font-weight:800; margin:0 0 6px; font-size:1.05rem}
+.sub{color:var(--muted); font-size:0.95rem}
+
+/* overlay actions */
+.overlay{position:absolute; top:12px; right:12px; display:flex; gap:8px}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06)); color:#fff; border:1px solid rgba(255,255,255,0.04); cursor:pointer; box-shadow: 0 6px 18px rgba(2,6,23,0.35); transition: transform calc(var(--hover-duration)/2) var(--hover-ease), box-shadow calc(var(--hover-duration)/2) var(--hover-ease), background calc(var(--hover-duration)/2) var(--hover-ease)}
+.icon-btn:hover{transform:translateY(-4px); box-shadow: 0 10px 26px rgba(2,6,23,0.42)}
+.likes{display:inline-flex; gap:10px; align-items:center; color:var(--muted)}
+
+/* ===== Premium card visuals (rich, cinematic) ===== */
+.card-inner{position:relative; border-radius:14px; overflow:hidden; background:linear-gradient(180deg, rgba(6,10,20,0.35), rgba(6,8,16,0.25));
+  /* layered, softer shadow for a cinematic feel */
+  box-shadow: 0 10px 30px rgba(2,6,23,0.45), 0 28px 60px rgba(2,6,23,0.36);
+  transition: transform var(--hover-duration) var(--hover-ease), box-shadow var(--hover-duration) var(--hover-ease), border-color calc(var(--hover-duration) / 1.6) var(--hover-ease);
+}
+/* inner decorative rim for premium cards */
+.card-inner::after{content:""; position:absolute; inset:6px; border-radius:10px; pointer-events:none; z-index:1;
+  /* subtle frosted rim + highlight */
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), inset 0 6px 18px rgba(2,6,23,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.02));
+  mix-blend-mode: overlay; opacity:0.95;
+  transition: opacity var(--hover-duration) var(--hover-ease), box-shadow var(--hover-duration) var(--hover-ease);
+}
+.movie-card{background:transparent; border:none}
+.movie-card .card-inner{transform-origin:center center}
+
+/* decorative gradient rim using pseudo element */
+.movie-card::before{content:""; position:absolute; inset:0; z-index:0; border-radius:16px; padding:2px; background:linear-gradient(135deg, rgba(127,91,255,0.14), rgba(255,107,129,0.08)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); pointer-events:none}
+/* ensure card content sits above the decorative rim */
+.card-inner{z-index:2}
+.poster-wrap, .meta{z-index:3}
+
+.poster-wrap{position:relative; overflow:hidden; border-radius:12px 12px 0 0; z-index:1}
+.poster{width:100%; height:420px; object-fit:cover; display:block; transition: transform var(--poster-duration) var(--hover-ease), filter var(--poster-duration) var(--hover-ease)}
+.movie-card:hover .card-inner{transform:translateY(-10px) scale(1.02); box-shadow: 0 44px 96px rgba(2,6,23,0.7)}
+.movie-card:hover .poster{transform:scale(1.1) translateY(-10px); filter:brightness(1.04) saturate(1.08)}
+
+/* play overlay */
+.play-overlay{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.9); z-index:3; width:86px; height:86px; border-radius:50%; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity calc(var(--hover-duration) / 1.1) var(--hover-ease), transform calc(var(--hover-duration) / 1.1) var(--hover-ease)}
+.movie-card:hover .play-overlay{opacity:1; transform:translate(-50%,-50%) scale(1)}
+.play-overlay i{color:#051026; font-size:26px}
+
+/* badge */
+.badge{position:absolute; left:12px; top:12px; z-index:4; padding:6px 10px; border-radius:999px; background:rgba(0,0,0,0.42); color:#fff; font-weight:800; box-shadow: 0 8px 28px rgba(2,6,23,0.55); transition: transform calc(var(--hover-duration) / 1.6) var(--hover-ease), opacity calc(var(--hover-duration) / 1.6) var(--hover-ease)}
+
+.meta{padding:14px; position:relative; z-index:2}
+.title{font-weight:800; margin:0 0 6px; font-size:1.05rem}
+.card-meta{display:flex; justify-content:space-between; gap:12px; align-items:center}
+.info-strip{margin-top:10px; color:var(--muted); font-size:0.95rem; max-height:48px; overflow:hidden}
+.actions{display:flex; gap:14px; margin-top:14px; align-items:center}
+
+/* shimmer for new badges */
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.badge.new{position:relative; overflow:hidden}
+.badge.new::after{content:""; position:absolute; inset:0; transform:translateX(-120%); background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.16), rgba(255,255,255,0.06)); animation:shimmer 1.8s linear infinite}
+
+/* responsive adjustments */
+@media (max-width:1100px){
+  .poster{height:360px}
+}
+@media (max-width:880px){
+  .poster{height:300px}
+  .poster-wrap .badge{left:8px; top:8px}
+}
+@media (max-width:520px){
+  .poster{height:220px}
+}
+
+/* favorite button */
+.fav-btn{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04)}
+.fav-btn.active{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026}
+
+/* toasts */
+.toast-wrap{position:fixed; left:50%; transform:translateX(-50%); top:22px; z-index:9999; display:flex; flex-direction:column; gap:10px; align-items:center}
+.toast{min-width:220px; padding:10px 14px; border-radius:10px; background:rgba(2,6,23,0.9); color:#eaf4ff; box-shadow:0 14px 40px rgba(4,6,20,0.6); opacity:0; transform:translateY(-8px) scale(.98); transition:opacity .28s, transform .28s}
+.toast.show{opacity:1; transform:translateY(0) scale(1)}
+
+/* keyboard helper */
+.kbd-hint{position:fixed; right:18px; bottom:18px; z-index:900; background:rgba(255,255,255,0.02); color:var(--muted); padding:8px 10px; border-radius:10px; font-size:0.9rem}
+
+/* focus trap overlay (visual only) */
+.focus-trap{outline:3px solid rgba(127,91,255,0.12); outline-offset:4px}
+
+
+
+/* like badge and animation */
+.like-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:linear-gradient(90deg, rgba(127,91,255,0.12), rgba(255,107,129,0.06)); color:#fff; font-weight:700}
+.heart-pop{display:inline-block; transition: transform .28s cubic-bezier(.2,.9,.3,1)}
+.heart-pop.pop{transform:scale(1.28) rotate(-8deg)}
+.heart-burst{position:absolute; width:12px; height:12px; background:var(--accent-secondary); border-radius:50%; opacity:0; pointer-events:none}
+.burst-anim{animation:burst 700ms forwards}
+@keyframes burst{0%{opacity:1; transform:translateY(0) scale(.6)}50%{opacity:1; transform:translateY(-14px) scale(1.05)}100%{opacity:0; transform:translateY(-28px) scale(1.6)}}
+
+/* subtle tilt on hover */
+.meta{transform-origin:50% 0; transition:transform .35s}
+.movie-card:hover .meta{transform:translateY(-6px)}
+
+#modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(1,2,7,0.6); z-index:60; pointer-events:none}
+.modal-open #modal{display:flex; pointer-events:auto}
+.modal-inner{width:100%; max-width:920px; background:linear-gradient(180deg,#081024 0%, #071022 100%); padding:22px; border-radius:14px; border:1px solid rgba(255,255,255,0.04)}
+.modal-inner .close{position:absolute; right:18px; top:18px; background:transparent; border:0; color:var(--muted); font-size:20px}
+.modal-inner .content{display:grid; grid-template-columns: 1fr 1fr; gap:18px}
+.modal-inner img{width:100%; border-radius:10px}
+.modal-inner h2{margin:0}
+.comments{display:flex; flex-direction:column; gap:10px; max-height:320px; overflow:auto}
+.comment{padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.02)}
+
+.comment-meta{color:var(--text); font-size:0.95rem}
+.avatar{width:36px; height:36px; border-radius:8px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; display:inline-flex; align-items:center; justify-content:center; font-weight:800}
+
+/* Keep confirm box compact and anchored to the comment so it doesn't push modal height beyond viewport */
+.confirm-box{max-width:320px; margin-top:8px;}
+
+/* sticker styling */
+.sticker-wrap{position:relative; display:flex; align-items:center; justify-content:center; padding:24px}
+.sticker{width:240px; height:240px; object-fit:cover; border-radius:50%; border:6px solid rgba(255,255,255,0.06); box-shadow: 0 18px 44px rgba(2,6,23,0.55); transform-origin:center center; opacity:0; transform: scale(0.97); transition:opacity calc(var(--hover-duration) / 1.3) var(--hover-ease), transform calc(var(--hover-duration) / 1.1) var(--hover-ease)}
+.sticker.loaded{opacity:1; transform: scale(1)}
+.sticker-badge{position:absolute; bottom:18px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); padding:8px 12px; border-radius:999px; color:#051026; font-weight:800; box-shadow: 0 6px 24px rgba(127,91,255,0.12)}
+
+/* modal entrance animation */
+.modal-inner{opacity:0; transform:translateY(8px) scale(.98); transition:opacity calc(var(--hover-duration) / 2.2) var(--hover-ease), transform calc(var(--hover-duration) / 2.2) var(--hover-ease)}
+.modal-open .modal-inner{opacity:1; transform:translateY(0) scale(1)}
+
+/* Ensure modal content fits viewport: keep close button visible by making modal scroll internally */
+.modal-inner{max-height:86vh; overflow:auto}
+.modal-inner .close{position:sticky; top:12px; z-index:120; float:right; margin-right:6px}
+.modal-inner .content{margin-top:12px}
+
+/* comment enter/exit animations */
+.comment{transition:opacity .28s ease, transform .32s ease, height .32s ease}
+.comment.enter{opacity:0; transform:translateY(8px);}
+.comment.enter.show{opacity:1; transform:translateY(0)}
+.comment.removing{opacity:0; transform:translateY(-8px); height:0; padding:0; margin:0; overflow:hidden}
+
+.anime-desc-body {
+  max-height: 10rem; /* clamp the visible height */
+  overflow: hidden;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  transition: max-height var(--hover-duration) ease;
+}
+
+.anime-desc-body.expanded {
+  max-height: 60rem; /* large enough for full content */
+}
+
+.read-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 6px 0;
+  text-decoration: underline;
+}
+
+.read-more-btn:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent-color) 40%, #fff);
+  outline-offset: 2px;
+}
+
+/* scroll-to-top floating button inside modal */
+#modal-scroll-top{position:fixed; right:22px; bottom:22px; z-index:80; display:none; width:44px; height:44px; border-radius:10px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 36px rgba(7,12,30,0.6); cursor:pointer}
+#modal-scroll-top.show{display:flex}
+
+
+
+/* Footer */
+footer{padding:28px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,0.03); margin-top:36px}
+
+/* Responsive */
+@media(max-width:880px){
+  .hero h1{font-size:1.9rem}
+  .poster{height:220px}
+  .modal-inner .content{grid-template-columns:1fr}
+}
+
+/* Accessibility focus states */
+button:focus, a:focus, input:focus, select:focus, textarea:focus{outline:3px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+/* small utilities */
+.hidden{display:none}
+
+/* keep some compatibility styles for older markup */
+.movie-list{display:flex; flex-wrap:wrap}
+
+
+/* ==========================================
+   Enhanced details modal & micro-animations
+   - richer backdrop blur and transitions
+   - decorative ring behind sticker
+   - sticker entrance animation
+   - comment list polish and form styling
+   - card hover sheen
+ ========================================== */
+
+/* Backdrop transition and subtle blur when modal opens */
+#modal{transition:background-color .36s ease, backdrop-filter .36s ease}
+.modal-open #modal{backdrop-filter: blur(8px); background: rgba(2,6,18,0.66)}
+
+/* modal shell enhancements */
+.modal-inner{position:relative; overflow:visible; padding:26px; border-radius:14px}
+.modal-inner::before{content:""; position:absolute; inset:0; pointer-events:none; border-radius:14px; mix-blend-mode:overlay; background:linear-gradient(120deg, rgba(127,91,255,0.02), rgba(255,107,129,0.01));}
+
+.close{background:rgba(2,6,23,0.45); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); transition:transform .18s ease, background .18s ease}
+.close:hover{transform:scale(1.06); background:rgba(255,255,255,0.03)}
+
+/* sticker decorative ring and entrance */
+.sticker-wrap{position:relative; display:flex; align-items:center; justify-content:center; padding:18px}
+.sticker-wrap::before{content:""; position:absolute; width:380px; height:380px; border-radius:50%; left:50%; top:46%; transform:translate(-50%,-50%) scale(.9); background: radial-gradient(closest-side, rgba(127,91,255,0.12), transparent 50%), radial-gradient(closest-side, rgba(255,107,129,0.06), transparent 44%); filter:blur(18px) saturate(105%); opacity:0; transition: opacity calc(var(--hover-duration) / 1.1) var(--hover-ease), transform calc(var(--hover-duration) / 1.1) var(--hover-ease); z-index:0}
+.modal-open .sticker-wrap::before{opacity:1; transform:translate(-50%,-50%) scale(1)}
+
+.sticker{position:relative; z-index:1; width:260px; height:260px; border-radius:50%; border:6px solid rgba(255,255,255,0.06); box-shadow: 0 30px 80px rgba(7,12,30,0.7); transform-origin:center; opacity:0; transform:translateY(8px) scale(.94) rotate(-6deg); transition: box-shadow var(--hover-duration), transform var(--hover-duration) var(--hover-ease), opacity calc(var(--hover-duration) / 1.8) var(--hover-ease)}
+.modal-open .sticker{opacity:1; transform:translateY(0) scale(1) rotate(0); animation:stickerIn .52s cubic-bezier(.18,.9,.25,1)}
+
+@keyframes stickerIn{
+  0%{opacity:0; transform:translateY(12px) scale(.78) rotate(-8deg)}
+  60%{transform:translateY(-8px) scale(1.06) rotate(6deg)}
+ 100%{opacity:1; transform:translateY(0) scale(1) rotate(0)}
+}
+
+/* modal content typography */
+.modal-inner .title{font-size:1.45rem; margin-bottom:6px}
+.modal-inner .sub{color:var(--muted); line-height:1.6}
+
+/* Trailer embed styling inside modal */
+.trailer-wrap{margin:12px 0 18px; width:100%; display:block}
+.trailer-iframe{width:100%; height:220px; border-radius:10px; border:0; box-shadow:0 12px 32px rgba(2,6,23,0.6)}
+
+/* Loading skeletons for poster and cards */
+.skeleton{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04)); position:relative; overflow:hidden}
+.skeleton::after{content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.06), rgba(255,255,255,0.01)); transform:translateX(-100%); animation:skew 1.2s linear infinite}
+@keyframes skew{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.poster.skeleton{height:360px; border-radius:12px}
+.card-inner.skeleton{height:460px}
+
+/* sr-only utility for aria live region */
+.sr-only{position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+
+/* small adjustments for modal trailer on small screens */
+@media(max-width:880px){
+  .trailer-iframe{height:180px}
+}
+
+/* comments styling */
+.comments{display:flex; flex-direction:column; gap:12px; max-height:360px; overflow:auto; padding:6px}
+.comments::-webkit-scrollbar{width:10px}
+.comments::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--accent-primary),var(--accent-secondary)); border-radius:999px}
+.comment{display:flex; gap:12px; align-items:flex-start; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); border-radius:10px; border:1px solid rgba(255,255,255,0.02)}
+.comment .avatar{width:44px; height:44px; border-radius:10px; flex:0 0 44px; background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary)); display:flex; align-items:center; justify-content:center; color:#051026; font-weight:800}
+.comment .body{flex:1}
+.comment .meta{display:flex; gap:8px; align-items:center; font-size:0.82rem; color:var(--muted); margin-bottom:6px}
+.comment p{margin:0; color:#e6f6ff}
+
+/* comment form */
+form{display:flex; flex-direction:column; gap:10px; margin-top:10px}
+form input[type="text"], form textarea{padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:inherit; resize:vertical}
+form textarea{min-height:84px}
+form button#submitComment{align-self:flex-start; padding:10px 14px; background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:800; border-radius:10px; border:none; cursor:pointer; transition:transform .18s, box-shadow .18s}
+form button#submitComment:hover{transform:translateY(-2px); box-shadow:0 10px 30px rgba(127,91,255,0.12)}
+small#small{color:#ffadb3}
+
+/* subtle card sheen on hover */
+.movie-card{position:relative; overflow:visible}
+.movie-card::after{content:""; position:absolute; left:-40%; top:-30%; width:40%; height:180%; transform:rotate(24deg) translateX(-120%); background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12), rgba(255,255,255,0.02)); opacity:0; transition: transform var(--hover-duration) var(--hover-ease), opacity calc(var(--hover-duration) / 1.2) var(--hover-ease)}
+.movie-card:hover::after{transform:rotate(24deg) translateX(220%); opacity:0.18}
+
+/* responsive: make sticker smaller on narrow screens */
+@media(max-width:620px){
+  .sticker-wrap::before{width:280px; height:280px}
+  .sticker{width:200px; height:200px}
+}
+
+/* comment close/delete button */
+.comment{position:relative; padding:12px}
+.comment-close{background:transparent; border:0; color:var(--muted); font-size:20px; line-height:1; cursor:pointer; padding:6px 8px; border-radius:8px; transition:background .16s, color .16s}
+.comment-close{opacity:0; transform:translateY(-2px); transition:opacity .18s ease, transform .18s ease}
+.comment:focus-within .comment-close, .comment:hover .comment-close{opacity:1; transform:translateY(0)}
+.comment-close:hover{background:rgba(255,255,255,0.03); color:var(--accent-secondary)}
+
+/* inline confirm box styling */
+.confirm-box{margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 10px; border-radius:10px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03)}
+.confirm-box span{color:var(--muted); font-size:0.92rem}
+.confirm-actions{display:flex; gap:8px}
+.confirm-actions button{padding:8px 10px; border-radius:8px; border:0; cursor:pointer}
+.confirm-actions .confirm-yes{background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary)); color:#051026; font-weight:700}
+.confirm-actions .confirm-no{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+/* ===== Smooth reveal, tilt & shine for premium cards ===== */
+:root{ --card-pop-duration: 520ms; --card-ease: cubic-bezier(.18,.9,.25,1) }
+
+/* starting state for cards, then JS will add .show to stagger-in */
+.movie-card{opacity:0; transform:translateY(18px); transition:opacity .56s var(--card-ease), transform .56s var(--card-ease)}
+.movie-card.show{opacity:1; transform:translateY(0)}
+
+/* apply 3D tilt to inner surface so we can animate without conflicting with outer translate */
+.card-inner{transition:transform calc(var(--hover-duration) / 2.6) var(--hover-ease), box-shadow calc(var(--hover-duration) / 2.6) var(--hover-ease)}
+.card-inner:hover{box-shadow: 0 50px 110px rgba(2,6,23,0.72)}
+
+/* shine overlay controlled by CSS variable set by pointermove */
+.poster-wrap::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(120deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015)); mix-blend-mode:overlay; opacity:0; transform:translateX(-26%); transition: opacity calc(var(--hover-duration) / 2.6) var(--hover-ease), transform calc(var(--hover-duration) / 2.6) var(--hover-ease)}
+.movie-card:hover .poster-wrap::after{opacity:0.14}
+.poster-wrap{--shine-x:50%;}
+.poster-wrap::after{background: radial-gradient(1200px circle at var(--shine-x) 30%, rgba(255,255,255,0.14), transparent 10%)}
+
+/* subtle floating micro animation for idle cards */
+.movie-card.idle{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+
+/* small accessibility: make actions more visible on focus */
+.actions .icon-btn:focus{outline:2px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+
+
+/* =========================
+   Theme presets
+   - .theme-warm : Warm / Cinematic
+   - .theme-cool : Cool / Neon
+   - .theme-pastel: Soft pastel modern
+   Usage: add the class to <html> or document.documentElement
+   Example: <html class="dark theme-cool">
+   ========================= */
+
+.theme-warm{
+  --accent-primary: #ff7a59; /* warm orange */
+  --accent-secondary: #ffd66b; /* gold */
+  --bg-0: #0b0710;
+  --bg-1: #0f0b15;
+  --panel: rgba(255,255,255,0.03);
+  --glass: rgba(255,255,255,0.02);
+  --glass-2: rgba(255,255,255,0.01);
+  --text: #f6efe9;
+  --muted: #d7c8b9;
+}
+
+.theme-cool{
+  --accent-primary: #6ee7ff; /* cyan */
+  --accent-secondary: #7c5cff; /* purple */
+  --bg-0: #05060b;
+  --bg-1: #061126;
+  --panel: rgba(255,255,255,0.02);
+  --glass: rgba(255,255,255,0.02);
+  --glass-2: rgba(255,255,255,0.01);
+  --text: #eaf8ff;
+  --muted: #9fc8d9;
+}
+
+.theme-pastel{
+  --accent-primary: #a78bfa; /* soft purple */
+  --accent-secondary: #f472b6; /* pink */
+  --bg-0: #f8fafc;
+  --bg-1: #f0f4f8;
+  --panel: rgba(6,10,20,0.03);
+  --glass: rgba(6,10,20,0.02);
+  --glass-2: rgba(6,10,20,0.01);
+  --text: #07122a;
+  --muted: #6b7280;
+}
+
+/* Netflix-inspired theme */
+.theme-netflix{
+  --accent-primary: #e50914; /* Netflix red */
+  --accent-secondary: #b81d24;
+  --bg-0: #050505;
+  --bg-1: #0b0b0b;
+  --panel: rgba(255,255,255,0.02);
+  --glass: rgba(255,255,255,0.02);
+  --text: #ffffff;
+  --muted: #9b9b9b;
+}
+
+/* When Netflix theme is active, tweak cards to be flatter and cinematic */
+.theme-netflix .card-inner{background:linear-gradient(180deg, rgba(6,6,6,0.7), rgba(6,6,6,0.85)); box-shadow: 0 14px 44px rgba(0,0,0,0.7)}
+.theme-netflix .badge{background:linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); color:#fff}
+.theme-netflix .poster{box-shadow: 0 24px 60px rgba(0,0,0,0.7);}
+.theme-netflix .play-overlay{background:linear-gradient(90deg,var(--accent-primary),#ff3b3b)}
+
+/* theme picker tiny styles */
+.theme-picker{display:flex; gap:8px; align-items:center}
+.theme-swatch{width:28px; height:28px; border-radius:6px; cursor:pointer; border:2px solid rgba(255,255,255,0.04)}
+.theme-swatch:focus{outline:3px solid rgba(127,91,255,0.12); outline-offset:3px}
+
+
+
+

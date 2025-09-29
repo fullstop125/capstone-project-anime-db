@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="./icons&imgs/dynasty-logo-plain.png"
+      type="image/x-icon"
+      sizes="96x96"
+    />
+    <title>Dynasty Ent</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner container">
+        <a class="brand" href="#">
+          <img src="./icons&imgs/dynasty-logo-plain.png" alt="logo" />
+          <div>
+            <div class="title">Dynasty Entertainment</div>
+            <div class="sub muted">Anime curated with love</div>
+          </div>
+        </a>
+        <div class="nav-links">
+          <a href="#">Animes(<span id="animesNum">0</span>)</a>
+          <a href="#">Newest</a>
+          <a href="#">Rank</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="container hero">
+      <div class="left">
+        <div class="kicker">Handpicked · Exclusive</div>
+        <h1>Discover your next favorite anime</h1>
+        <p>Explore trending, award-winning and fan-favorite titles. Click a card to view synopsis and comments.</p>
+        <a class="cta" href="#">Explore Now</a>
+      </div>
+      <div class="right">
+        <!-- optional visual / illustration -->
+        <img src="./icons&imgs/dynasty-logo.svg" alt="visual" style="opacity:0.12; max-width:320px;"/>
+      </div>
+    </header>
+
+    <section class="container" aria-label="anime gallery">
+      <div class="filters" style="margin-bottom:18px; display:flex; gap:10px; align-items:center;">
+        <input id="search" placeholder="Search titles..." style="flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit" />
+        <select id="sort" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit">
+          <option value="ranking">Top Ranked</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+
+      <div id="movie-list" class="grid">
+        <!-- anime cards injected here -->
+      </div>
+    </section>
+
+    <div
+      id="modal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-lg shadow-xl p-8 max-w-2xl w-full m-4">
+        <div class="flex justify-end">
+          <button id="close-modal" class="text-gray-400 hover:text-white">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="mt-4 text-center">
+          <img
+            id="modal-image"
+            class="w-1/2 mx-auto rounded-lg mb-4"
+            src="#"
+            alt="anime sticker"
+          />
+          <h1 id="modal-title" class="text-3xl font-bold mb-2"></h1>
+          <p id="animeDescription" class="text-gray-400 mb-6"></p>
+          <div class="border-t border-gray-700 pt-6">
+            <h3 class="text-2xl font-semibold mb-4">
+              Comments (<span id="commentsNumber">0</span>)
+            </h3>
+            <div id="comments" class="space-y-4 max-h-60 overflow-y-auto">
+              <!-- Comments will be injected here -->
+            </div>
+            <form class="mt-6">
+              <input
+                type="text"
+                id="InputName"
+                class="w-full bg-gray-700 text-white rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="Your name"
+              />
+              <textarea
+                id="commentToPost"
+                class="w-full bg-gray-700 text-white rounded-md p-3 mb-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="Your comment"
+              ></textarea>
+              <small id="small" class="text-red-500 hidden"
+                >Both fields must be filled</small
+              >
+              <button
+                id="submitComment"
+                type="submit"
+                class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-md mt-4 transition duration-300"
+              >
+                Post Comment
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-gray-800 mt-12">
+      <div
+        class="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center"
+      >
+        <p class="text-gray-400">
+          &copy; 2025 Dynasty Entertainment. All rights reserved.
+        </p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="#" class="text-gray-400 hover:text-white"
+            ><i class="fab fa-github"></i
+          ></a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
