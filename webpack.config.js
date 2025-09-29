@@ -7,9 +7,10 @@ module.exports = {
     methods: './src/modules/methods.js',
     APIs: './src/modules/APIsGET&POST.js',
   },
-  mode: 'development',
+  // use NODE_ENV if provided, default to development for local dev
+  mode: process.env.NODE_ENV || 'development',
   devServer: {
-    static: './dist',
+    static: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -21,6 +22,8 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    // ensure relative asset paths so GitHub Pages (project pages) can load files correctly
+    publicPath: './',
   },
   optimization: {
     runtimeChunk: 'single',
@@ -32,8 +35,18 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/images/[hash][ext][query]'
+        }
+      },
+      {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[hash][ext][query]'
+        }
       },
     ],
   },
