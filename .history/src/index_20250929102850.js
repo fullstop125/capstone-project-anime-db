@@ -18,7 +18,7 @@ const submit = document.getElementById('submitComment');
 const username = document.getElementById('InputName');
 const comment = document.getElementById('commentToPost');
 const small = document.getElementById('small');
-// themeToggle element is managed by the Theme module; avoid direct reference here
+const themeToggle = document.getElementById('theme-toggle');
 
 // pagination state for load-more
 let currentPage = 1;
@@ -133,8 +133,7 @@ Theme.initTheme();
   loadMoreWrap.style.display = 'flex';
   loadMoreWrap.style.justifyContent = 'center';
   loadMoreWrap.style.margin = '28px 0';
-  // use outer-scoped loadMoreBtn variable so other functions can access it
-  loadMoreBtn = document.createElement('button');
+  const loadMoreBtn = document.createElement('button');
   loadMoreBtn.className = 'cta load-more';
   loadMoreBtn.innerText = 'Load more';
   loadMoreWrap.appendChild(loadMoreBtn);
@@ -176,7 +175,7 @@ Theme.initTheme();
     // Prefetch immediately after initial load
     setTimeout(() => { prefetchNext(); }, 800);
 
-  if (loadMoreBtn) loadMoreBtn.addEventListener('click', async () => {
+    loadMoreBtn.addEventListener('click', async () => {
     // determine next page URL depending on whether user is searching
     currentPage += 1;
     loadMoreBtn.disabled = true;
@@ -220,10 +219,8 @@ Theme.initTheme();
       console.warn('Load more failed', err);
       showToast('Failed to load more items');
     }
-    if (loadMoreBtn) {
-      loadMoreBtn.disabled = false;
-      loadMoreBtn.innerText = 'Load more';
-    }
+    loadMoreBtn.disabled = false;
+    loadMoreBtn.innerText = 'Load more';
   });
   // After data is loaded, wire featured poster to the latest anime (first item) if present
   try {
@@ -569,7 +566,14 @@ function applyThemeClass(themeClass) {
 const savedThemeClass = localStorage.getItem('themeClass');
 if (savedThemeClass) applyThemeClass(savedThemeClass);
 
-// theme swatches are handled by Theme.initTheme (delegated). No local wiring here.
+// wire up swatches
+document.querySelectorAll('.theme-swatch').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.theme;
+    applyThemeClass(t);
+    showToast('Theme applied', 1200);
+  });
+});
 
 // FAB quick actions
 const fab = document.getElementById('fab');

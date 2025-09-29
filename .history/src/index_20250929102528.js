@@ -3,7 +3,6 @@ import './style.css';
 // import './tailwind.css';
 import Methods from './modules/methods.js';
 import { postLikes, checkAPI } from './modules/APIsGET&POST.js';
-import Theme from './modules/theme.js';
 
 const methods = new Methods();
 // Use Jikan API for current season (latest animes)
@@ -18,7 +17,7 @@ const submit = document.getElementById('submitComment');
 const username = document.getElementById('InputName');
 const comment = document.getElementById('commentToPost');
 const small = document.getElementById('small');
-// themeToggle element is managed by the Theme module; avoid direct reference here
+const themeToggle = document.getElementById('theme-toggle');
 
 // pagination state for load-more
 let currentPage = 1;
@@ -105,8 +104,56 @@ document.addEventListener('keydown', (ev) => {
 });
 
 
-// Initialize theme module which wires delegated handlers and applies saved theme
-Theme.initTheme();
+// Theme toggle: read from localStorage, apply to root, update icon
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (!theme) return;
+  if (theme === 'light') {
+    root.classList.remove('dark');
+    updateThemeToggleIcon('light');
+  } else {
+    root.classList.add('dark');
+    updateThemeToggleIcon('dark');
+  }
+  try { localStorage.setItem('theme', theme); } catch (e) { /* ignore */ }
+}
+
+// helper to set theme-toggle icon safely
+function updateThemeToggleIcon(theme) {
+  const el = document.getElementById('theme-toggle');
+  if (!el) return;
+  if (theme === 'light') el.innerHTML = '<i class="fas fa-sun"></i>';
+  else el.innerHTML = '<i class="fas fa-moon"></i>';
+}
+
+// Initialize theme on load
+const savedTheme = localStorage.getItem('theme') || 'dark';
+applyTheme(savedTheme);
+
+
+// use delegated click handling so theme toggle works even if the element wasn't available at script init
+document.addEventListener('click', (e) => {
+  const toggle = e.target.closest && e.target.closest('#theme-toggle');
+  if (!toggle) return;
+  const root = document.documentElement;
+  const isDark = root.classList.contains('dark');
+  const newTheme = isDark ? 'light' : 'dark';
+  applyTheme(newTheme);
+  // visual pulse
+  toggle.classList.add('pulse');
+  setTimeout(() => toggle.classList.remove('pulse'), 520);
+});
+
+// delegated swatch clicks (safer for dynamic DOM)
+document.addEventListener('click', (e) => {
+  const sw = e.target.closest && e.target.closest('.theme-swatch');
+  if (!sw) return;
+  const t = sw.dataset.theme;
+  if (t) {
+    applyThemeClass(t);
+    showToast('Theme applied', 1200);
+  }
+});
 
 // initialize app and wire post-load interactions
 (async function initApp() {
@@ -133,8 +180,7 @@ Theme.initTheme();
   loadMoreWrap.style.display = 'flex';
   loadMoreWrap.style.justifyContent = 'center';
   loadMoreWrap.style.margin = '28px 0';
-  // use outer-scoped loadMoreBtn variable so other functions can access it
-  loadMoreBtn = document.createElement('button');
+  const loadMoreBtn = document.createElement('button');
   loadMoreBtn.className = 'cta load-more';
   loadMoreBtn.innerText = 'Load more';
   loadMoreWrap.appendChild(loadMoreBtn);
@@ -176,7 +222,7 @@ Theme.initTheme();
     // Prefetch immediately after initial load
     setTimeout(() => { prefetchNext(); }, 800);
 
-  if (loadMoreBtn) loadMoreBtn.addEventListener('click', async () => {
+    loadMoreBtn.addEventListener('click', async () => {
     // determine next page URL depending on whether user is searching
     currentPage += 1;
     loadMoreBtn.disabled = true;
@@ -220,10 +266,8 @@ Theme.initTheme();
       console.warn('Load more failed', err);
       showToast('Failed to load more items');
     }
-    if (loadMoreBtn) {
-      loadMoreBtn.disabled = false;
-      loadMoreBtn.innerText = 'Load more';
-    }
+    loadMoreBtn.disabled = false;
+    loadMoreBtn.innerText = 'Load more';
   });
   // After data is loaded, wire featured poster to the latest anime (first item) if present
   try {
@@ -569,7 +613,14 @@ function applyThemeClass(themeClass) {
 const savedThemeClass = localStorage.getItem('themeClass');
 if (savedThemeClass) applyThemeClass(savedThemeClass);
 
-// theme swatches are handled by Theme.initTheme (delegated). No local wiring here.
+// wire up swatches
+document.querySelectorAll('.theme-swatch').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.theme;
+    applyThemeClass(t);
+    showToast('Theme applied', 1200);
+  });
+});
 
 // FAB quick actions
 const fab = document.getElementById('fab');
@@ -594,7 +645,7 @@ if (fabMenu) {
     if (action === 'toggle-theme') {
       const root = document.documentElement;
       const isDark = root.classList.contains('dark');
-      Theme.applyTheme(isDark ? 'light' : 'dark');
+      applyTheme(isDark ? 'light' : 'dark');
       showToast('Theme toggled', 900);
     }
     if (action === 'focus-search') {
